@@ -12,12 +12,30 @@
 </head>
 <body>
     <div class="container">
-        <h1>Weather Dashboard</h1>
+        <h1 class="text-center">Weather Dashboard</h1>
         <div class="row">
             <div class="col-md-6">
                 <!-- search form -->
+                <div class="form">
+                    <label for="location">Search for a City:</label>
+                    <input type="text" class="form-control" id="location" placeholder="City, Country">
+                    <button id="getWeather" class="btn btn-secondary btn-block">Search</button>
+                </div>
                 <!-- search history -->
-            </div>      
+                <div id="searchHistory" class="mt-4">
+
+                </div>
+            </div>  
+            <!-- current weather -->
+            <div class="col-md-6">
+                <div id="currentWeather" class="text-center">
+
+                </div>
+            </div>
+                <!-- 5-Day Forecast -->
+                <div id="forecast" class="mt-4">
+
+                </div>
         </div>
     </div>
 
