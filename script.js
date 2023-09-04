@@ -38,19 +38,25 @@ function fetchWeather(city) {
     currentWeather.innerHTML = "";
     forecast.innerHTML = "";
 
-    fetch('https://api.openweathermap.org/data/2.5/weather?q=${city}&appid={apiKey}')
-        .then((response) => response.JSON())
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+
+        .then((response) => response.json())
         .then((data) => {
             const weatherData = {
                 name: data.name,
                 description: data.weather[0].description,
-                temperature: data.main.temp,
+                temperature: (data.main.temp - 273.15).toFixed(2),
                 humidity: data.main.humidity,
                 windSpeed: data.wind.speed,
             };
-            currentWeather.innerHTML = 
-            '<h2>${weatherData.name}</h2><p>${weatherData.description} </p><p>Temp: ${weatherData.temperature}°C</p><p>Humidity: ${weatherData.humidity}%</p><p>Wind Speed: ${weatherData.windSpeed} m/s</p>';
-        
+            currentWeather.innerHTML = `
+                <h2>${weatherData.name}</h2>
+                <p>${weatherData.description}</p>
+                <p>Temp: ${weatherData.temperature}°C</p>
+                <p>Humidity: ${weatherData.humidity}%</p>
+                <p>Wind Speed: ${weatherData.windSpeed} m/s</p>
+            `;
+
             fetch5DayForecast(city);
         })
         .catch((error) => {
@@ -60,26 +66,34 @@ function fetchWeather(city) {
 
 //Function for fetching 5-Day forecast
 function fetch5DayForecast(city) {
-
-    fetch('https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid={apiKey}')
-        .then((response) => response.JSON())
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`)
+        .then((response) => response.json())
         .then((data) => {
-            //display forecast
-            const forecastData = data.list.filter((item) => item.dt_txt.includes('12:00:00')); 
-            forecast.innerHTML = '<h2>5-Day Forecast</2>';
-            forecastData.forEach((day) =>
-            {
+            // Display forecast
+            const forecastData = data.list.filter((item) => item.dt_txt.includes('12:00:00'));
+            forecast.innerHTML = ''; // Clear existing forecast
+            forecastData.forEach((day) => {
                 const date = new Date(day.dt * 1000);
                 const icon = day.weather[0].icon;
-                const temperature = data.main.temp;
-                const humidity = data.main.humidity;
-                const windSpeed = data.wind.speed;
-            
-            forecast.innerHTML = 
-            '<div class="forecast-item"><p>Date: ${date.toDateString()} </p><p>Temp: ${weatherData.temperature}°C</p><p>Humidity: ${weatherData.humidity}%</p><p>Wind Speed: ${weatherData.windSpeed} m/s</p></div>';
-    
-        });
-    })
+                const temperature = (day.main.temp - 273.15).toFixed(2); // Convert temperature to Celsius
+                const humidity = day.main.humidity;
+                const windSpeed = day.wind.speed;
+
+                // Create an individual forecast box
+                const forecastBox = document.createElement("div");
+                forecastBox.classList.add("forecast-item");
+                forecastBox.innerHTML = `
+                    <p>Date: ${date.toDateString()}</p>
+                    <p>Temp: ${temperature}°C</p>
+                    <p>Humidity: ${humidity}%</p>
+                    <p>Wind Speed: ${windSpeed} m/s</p>
+                    <img src="https://openweathermap.org/img/w/${icon}.png" alt="${day.weather[0].description}">
+                `;
+
+                // Append the box to the forecast container
+                forecast.appendChild(forecastBox);
+            });
+        })
         .catch((error) => {
             console.error("Error fetching 5-Day Forecast data: ", error);
         });
