@@ -6,6 +6,44 @@ const searchHistory = document.getElementById("historyList");
 const forecast = document.getElementById("forecast");
 const apiKey = "0615a270744e55b9a49bb04899dbef3a";
 
+// Function to add a city to the search history and local storage
+function addtoSearchHistory(city) {
+    const listItem = document.createElement("li");
+    listItem.textContent = city;
+    listItem.classList.add("list-group-item");
+    searchHistory.appendChild(listItem);
+
+    // Save the search to local storage
+    saveSearchToLocalStorage(city);
+}
+
+// Function to save it
+function saveSearchToLocalStorage(city) {
+    
+    // Retrieve the existing search history from local or initialize it as empty
+    const existingSearches = JSON.parse(localStorage.getItem("searchHistory")) || [];
+
+    // Add the new search to the array
+    existingSearches.push(city);
+
+    // Save the updated search history back to local storage
+    localStorage.setItem("searchHistory", JSON.stringify(existingSearches));
+}
+
+// Function to load and display search history from local storage
+function loadSearchHistoryFromLocalStorage() {
+    const savedSearches = JSON.parse(localStorage.getItem("searchHistory"));
+
+    if (savedSearches && savedSearches.length > 0) {
+        savedSearches.forEach((city) => {
+            addtoSearchHistory(city);
+        });
+    }
+}
+
+// Load and display search history when the page loads
+loadSearchHistoryFromLocalStorage();
+
 //Get weather
 getWeatherButton.addEventListener("click", () => {
     const city = locationInput.value;

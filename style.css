@@ -4,9 +4,9 @@ body, h1, h2, p {
     padding: 0;
 }
 
-/* Set a background color for the body */
+/* Set the body */
+
 body {
-    background-color: #666363;
     font-family: Arial, sans-serif;
 }
 
@@ -49,7 +49,7 @@ h1 {
     width: 100%;
     padding: 10px;
     background-color: #1f3d5d;
-    color: #fff;
+    color: #f7f3f3;
     border: none;
     border-radius: 5px;
     cursor: pointer;
