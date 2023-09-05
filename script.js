@@ -71,13 +71,14 @@ function fetch5DayForecast(city) {
         .then((data) => {
             // Display forecast
             const forecastData = data.list.filter((item) => item.dt_txt.includes('12:00:00'));
-            forecast.innerHTML = ''; // Clear existing forecast
+            forecast.innerHTML = '<h2>5-Day Forecast</h2>';
             forecastData.forEach((day) => {
                 const date = new Date(day.dt * 1000);
                 const icon = day.weather[0].icon;
-                const temperature = (day.main.temp - 273.15).toFixed(2); // Convert temperature to Celsius
+                const temperature = (day.main.temp - 273.15).toFixed(2);
                 const humidity = day.main.humidity;
                 const windSpeed = day.wind.speed;
+                const iconUrl = `https://openweathermap.org/img/w/${icon}.png`;
 
                 // Create an individual forecast box
                 const forecastBox = document.createElement("div");
@@ -87,7 +88,7 @@ function fetch5DayForecast(city) {
                     <p>Temp: ${temperature}°C</p>
                     <p>Humidity: ${humidity}%</p>
                     <p>Wind Speed: ${windSpeed} m/s</p>
-                    <img src="https://openweathermap.org/img/w/${icon}.png" alt="${day.weather[0].description}">
+                    <img src="${iconUrl}" alt="${day.weather[0].description}">
                 `;
 
                 // Append the box to the forecast container
